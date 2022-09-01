@@ -39,7 +39,10 @@ class MainViewModel @Inject constructor(
     private fun assignDrivers() {
         val gson = Gson()
         val data = gson.fromJson(jsonString, InputJson::class.java)
-        println("size = ${data.drivers?.size},${data.shipments?.size} ")
+        if (data.drivers?.size != data.shipments?.size) {
+            println("ERROR: driver list size does not match shipment list size")
+            return
+        }
         viewModelScope.launch(Dispatchers.IO) {
             //reset database
             shipmentDriverDao.deleteAll()
